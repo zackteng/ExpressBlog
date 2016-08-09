@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+var flash = require('connect-flash');
 
 var routes = require('./routes/index');
 
@@ -25,9 +26,10 @@ app.use(session({
   secret: 'myblog',
   cookie: { maxAge: 3600000 * 24 *30 },
   store: new MongoStore({
-    url: 'mongodb://localhost:27071/blog'
+    url: 'mongodb://127.0.0.1:27017/blog'
   })
 }));
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
 routes(app);
