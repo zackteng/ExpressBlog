@@ -1,4 +1,5 @@
 var connectDb = require('./db');
+var markdown = require('markdown').markdown;
 
 function Post(post) {
   this.name = post.name;
@@ -46,7 +47,10 @@ Post.get = function (name, callback) {
         if(err) {
           callback(err);
         }
-        callback(null, posts);
+        var mdPosts = posts.map(function (post) {
+          return Object.assign({}, post, {content: markdown.toHTML(post.content)});
+        });
+        callback(null, mdPosts);
       });
     });
   });
