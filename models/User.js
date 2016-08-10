@@ -15,7 +15,7 @@ User.prototype.save = function (callback) {
     name: this.name,
     password: this.password,
     email: this.email
-  }
+  };
   connectDb(function (db) {
     db.collection("users", function (err, collection) {
       if(err) {
