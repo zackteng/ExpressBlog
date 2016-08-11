@@ -37,13 +37,13 @@ User.get = function (name, callback) {
   connectDb(function (db) {
     db.collection("users", function (err, collection) {
       if(err) {
-        callback(err);
+        return callback(err);
       }
       collection.findOne({
         name: name
       }, function (err, user) {
         if(err) {
-          callback(err);
+          return callback(err);
         }
         callback(null, user);
       });

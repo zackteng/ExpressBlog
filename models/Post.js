@@ -31,11 +31,11 @@ Post.prototype.save = function (callback) {
   });
 };
 
-Post.get = function (name, callback) {
+Post.getAll = function (name, callback) {
   connectDb(function (db) {
     db.collection("posts", function (err, collection) {
       if(err) {
-        callback(err);
+        return callback(err);
       }
       var query = {};
       if(name) {
@@ -45,12 +45,32 @@ Post.get = function (name, callback) {
         time: -1
       }).toArray(function (err, posts) {
         if(err) {
-          callback(err);
+          return callback(err);
         }
         var mdPosts = posts.map(function (post) {
           return Object.assign({}, post, {content: markdown.toHTML(post.content)});
         });
         callback(null, mdPosts);
+      });
+    });
+  });
+};
+
+Post.getOne = function (name, title, callback) {
+  connectDb(function (db) {
+    db.collection("posts", function (err, collection) {
+      if (err) {
+        return  callback(err);
+      }
+      collection.findOne({
+        "name": name,
+        "title": title
+      }, function (err, post) {
+        if(err) {
+          return callback(err);
+        }
+        var mdPost = Object.assign({}, post, { content: markdown.toHTML(post.content) });
+        callback(null, mdPost);
       });
     });
   });
