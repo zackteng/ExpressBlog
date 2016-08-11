@@ -76,4 +76,65 @@ Post.getOne = function (name, title, callback) {
   });
 };
 
+Post.edit = function (name, title, callback) {
+  connectDb(function (db) {
+    db.collection('posts', function (err, collection) {
+      if(err) {
+        return callback(err);
+      }
+      collection.findOne({
+        "name": name,
+        "title": title
+      }, function (err, post) {
+        if (err) {
+          return callback(err);
+        }
+        callback(null, post);
+      });
+    });
+  });
+};
+
+Post.update = function (name, title, content, callback) {
+  connectDb(function (db) {
+    db.collection('posts', function (err, collection) {
+      if (err) {
+        return callback(err);
+      }
+      collection.update({
+        "name": name,
+        "title": title,
+      }, {
+        $set: { content: content }
+      }, function (err) {
+        if (err) {
+          return callback(err);
+        }
+        callback(null);
+      });
+    });
+  });
+};
+
+Post.remove = function (name, title, callback) {
+  connectDb(function (db) {
+    db.collection('posts', function (err, collection) {
+      if (err) {
+        return callback(err);
+      }
+      collection.remove({
+        name: name,
+        title: title
+      }, {
+        w: 1
+      }, function (err) {
+        if (err) {
+          callback(err);
+        }
+        callback(null);
+      });
+    });
+  });
+};
+
 module.exports = Post;

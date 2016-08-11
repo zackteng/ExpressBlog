@@ -1,0 +1,13 @@
+<%- include header %>
+<form method="post" action="/edit/<%= post.name %>/<%= post.title %>">
+  <div class="">
+    <label for="title">标题: </label>
+    <input id="title" type="text" name="title" value="<%= post.title %>" disabled/>
+  </div>
+  <div class="">
+    <label for="content">正文: </label>
+    <textarea id="content" name="content" rows="20" cols="100"><%= post.content %></textarea>
+  </div>
+  <button type="submit">保存修改</button>
+</form>
+<%- include footer %>
