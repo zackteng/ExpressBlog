@@ -2,6 +2,7 @@ var crypto = require('crypto');
 var helper = require('./helper');
 var User = require('../models/User');
 var Post = require('../models/Post');
+var Comment = require('../models/Comment');
 var multer = require('multer');
 
 var storage = multer.diskStorage({
@@ -185,6 +186,24 @@ module.exports = function (app) {
         error: req.flash('error').toString(),
         success: req.flash('success').toString()
       });
+    });
+  });
+  app.post('/u/:name/:title', function (req,res) {
+    var comment = {
+      name: req.body.name,
+      email: req.body.email,
+      website: req.body.website,
+      time: new Date(),
+      content: req.body.content
+    };
+    var newComment = new Comment(req.params.name, req.params.title, comment);
+    newComment.save(function (err) {
+      if (err) {
+        req.flash('error', err);
+        return res.redirect('back');
+      }
+      req.flash('success', '留言成功!');
+      res.redirect('back');
     });
   });
   app.get('/edit/:name/:title', helper.checkLogin);

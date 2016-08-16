@@ -12,7 +12,8 @@ Post.prototype.save = function (callback) {
     name: this.name,
     title: this.title,
     content: this.content,
-    time: new Date()
+    time: new Date(),
+    comments: []
   };
   connectDb(function (db) {
     db.collection("posts", function (err, collection) {
